@@ -220,3 +220,5 @@ Jenkins trigger demo
 Automatic Jenkins trigger final demonstration
 
 Automatic Jenkins trigger final demonstration
+
+Automatic Jenkins trigger test
