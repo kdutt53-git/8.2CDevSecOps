@@ -216,3 +216,5 @@ When the wizard is done, restart the application and run the exploits again to c
 Jenkins automatic trigger demonstration
 
 Jenkins trigger demo
+
+Automatic Jenkins trigger final demonstration
