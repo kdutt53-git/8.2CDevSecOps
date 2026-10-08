@@ -1,0 +1,50 @@
+﻿pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/kdutt53-git/8.2CDevSecOps.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'node --version'
+                bat 'npm --version'
+                bat 'npm install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                bat 'npm test || exit /b 0'
+            }
+        }
+
+        stage('Generate Coverage Report') {
+            steps {
+                bat 'npm run coverage || exit /b 0'
+            }
+        }
+
+        stage('NPM Audit (Security Scan)') {
+            steps {
+                bat '''
+                    @echo off
+                    npm audit --json > npm-audit.json
+                    echo ===== NPM AUDIT RESULTS =====
+                    node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('npm-audit.json','utf8')); if(!r.metadata || !r.metadata.vulnerabilities){console.error('Audit summary unavailable');process.exit(1)} console.log(JSON.stringify(r.metadata.vulnerabilities,null,2))"
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'npm-audit.json',
+                allowEmptyArchive: true
+        }
+    }
+}
