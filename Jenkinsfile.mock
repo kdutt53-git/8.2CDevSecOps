@@ -1,55 +1,101 @@
 
+/*
+ * SIT753 - 7.1C
+ * Part 1 - Task 1: GitHub Integration with Jenkins
+ *
+ * Seven-Stage Mock CI/CD Pipeline
+ *
+ * Automatic SCM polling trigger test
+ * GitHub Repository:
+ * https://github.com/kdutt53-git/8.2CDevSecOps
+ *
+ * SCM polling is configured in Jenkins:
+ * Build Triggers -> Poll SCM -> H/2 * * * *
+ */
+
 pipeline {
     agent any
 
     stages {
+
         stage('Build') {
             steps {
+                echo '===================================='
+                echo 'STAGE 1: BUILD'
                 echo 'Task: Compile and package the application'
-                echo 'Tool: Maven'
+                echo 'Tool: Apache Maven'
+                echo '===================================='
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Task: Run unit and integration tests'
+                echo '===================================='
+                echo 'STAGE 2: UNIT AND INTEGRATION TESTS'
+                echo 'Task: Run unit tests and integration tests'
                 echo 'Tools: JUnit and Selenium'
+                echo '===================================='
             }
         }
 
         stage('Code Analysis') {
             steps {
+                echo '===================================='
+                echo 'STAGE 3: CODE ANALYSIS'
                 echo 'Task: Analyse code quality and standards'
                 echo 'Tool: SonarQube'
+                echo '===================================='
             }
         }
 
         stage('Security Scan') {
             steps {
+                echo '===================================='
+                echo 'STAGE 4: SECURITY SCAN'
                 echo 'Task: Identify security vulnerabilities'
                 echo 'Tool: Snyk'
+                echo '===================================='
             }
         }
 
         stage('Deploy to Staging') {
             steps {
+                echo '===================================='
+                echo 'STAGE 5: DEPLOY TO STAGING'
                 echo 'Task: Deploy application to staging server'
                 echo 'Tool: AWS EC2'
+                echo '===================================='
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Task: Validate application in staging'
+                echo '===================================='
+                echo 'STAGE 6: INTEGRATION TESTS ON STAGING'
+                echo 'Task: Test application in staging environment'
                 echo 'Tool: Postman/Newman'
+                echo '===================================='
             }
         }
 
         stage('Deploy to Production') {
             steps {
+                echo '===================================='
+                echo 'STAGE 7: DEPLOY TO PRODUCTION'
                 echo 'Task: Deploy application to production server'
                 echo 'Tool: AWS EC2'
+                echo '===================================='
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'All seven mock pipeline stages completed.'
+        }
+
+        failure {
+            echo 'Mock pipeline execution failed.'
         }
     }
 }
