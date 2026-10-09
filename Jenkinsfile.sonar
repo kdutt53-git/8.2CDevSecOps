@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Environment') {
+            steps {
+                bat 'node --version'
+                bat 'npm --version'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'call npm install'
+            }
+        }
+
+        stage('SonarCloud Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+
+                    withSonarQubeEnv('SonarCloud') {
+                        bat """
+                            @echo off
+                            call "${scannerHome}\\bin\\sonar-scanner.bat"
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'SonarCloud analysis submitted successfully.'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check Console Output.'
+        }
+    }
+}
